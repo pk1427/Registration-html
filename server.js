@@ -33,7 +33,7 @@ app.post("/registration", async (req, res) => {
     });
     res.send({ message: "User Created" });
   } catch (e) {
-    res.status(500).send({message: `Something went wrong`, error: e.message})
+    res.send({message: `Something went wrong`, error: e.message})
   }
 });
 app.post("login", (req, res) => {
