@@ -4,7 +4,7 @@ const express = require("express");
 const app = express();
 const connectDB = require("./utils/db");
 const User = require("./model/userSchema");
-const path = require('path');
+const path = require("path");
 app.use(express.json());
 app.use(cors());
 
@@ -17,21 +17,24 @@ connectDB().then(() => {
 });
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, '/index.html'));
+  res.sendFile(path.join(__dirname, "/index.html"));
 });
 
 app.post("/registration", async (req, res) => {
-  console.log(req.body);
-  //check if user exists
-  // if exist -> tell user to login not register -> use login function
-  // if DNE -> create user
-  
+  try {
+    console.log(req.body);
+    //check if user exists
+    // if exist -> tell user to login not register -> use login function
+    // if DNE -> create user
 
-  await User.create({
-    email: req.body.email,
-    password: req.body.password,
-  });
-  res.send({ message: "User Created" });
+    await User.create({
+      email: req.body.email,
+      password: req.body.password,
+    });
+    res.send({ message: "User Created" });
+  } catch (e) {
+    res.status(500).send({message: `Something went wrong`, error: e.message})
+  }
 });
 app.post("login", (req, res) => {
   // check if user exists
