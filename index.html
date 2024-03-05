@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration Form</title>
+</head>
+
+<body>
+
+  <h2>Registration Form</h2>
+
+  <form id="registrationForm">
+    <label for="name">Name:</label><br>
+    <input type="text" id="name" name="name" required><br><br>
+
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email" required><br><br>
+
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" name="password" required><br><br>
+
+    <input type="submit" value="Register">
+  </form>
+
+  <!-- Display registration status -->
+  <div id="registrationStatus"></div>
+
+  <script>
+    document.getElementById("registrationForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      // Get form data
+      const formData = new FormData(this);
+      const data = {};
+      formData.forEach((value, key) => {
+        data[key] = value;
+      });
+      console.log(data)
+      // Send data to backend
+      fetch("http://127.0.0.1:5000/registration", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Registration failed");
+          }
+          return response.json();
+        })
+        .then(data => {
+          document.getElementById("registrationStatus").textContent = JSON.stringify(data);
+        })
+        .catch(error => {
+          console.error("Registration error:", error);
+          document.getElementById("registrationStatus").textContent = "Registration failed. Please try again later.";
+        });
+    });
+  </script>
+
+</body>
+
+</html>

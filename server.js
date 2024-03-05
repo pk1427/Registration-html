@@ -4,6 +4,7 @@ const express = require("express");
 const app = express();
 const connectDB = require("./utils/db");
 const User = require("./model/userSchema");
+const path = require('path');
 app.use(express.json());
 app.use(cors());
 
@@ -16,7 +17,7 @@ connectDB().then(() => {
 });
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.sendFile(path.join(__dirname, '/index.html'));
 });
 
 app.post("/registration", async (req, res) => {
