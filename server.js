@@ -30,7 +30,8 @@ app.post("/registration", async (req, res) => {
 
     const user = User.findOne({ email: email });
 
-    if (user) {
+    if (user !== null) {
+      console.log(user)
       res.send({ message: "user already created" });
     } else {
       User.create({
