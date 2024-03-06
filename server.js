@@ -28,10 +28,9 @@ app.post("/registration", async (req, res) => {
     // if exist -> tell user to login not register -> use login function
     // if DNE -> create user
 
-    const user = User.findOne({ email: email });
+    const user = await User.findOne({ email: email });
 
-    if (user !== null) {
-      console.log(user)
+    if (user) {
       res.send({ message: "user already created" });
     } else {
       User.create({
