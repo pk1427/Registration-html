@@ -22,24 +22,45 @@ app.get("/", (req, res) => {
 
 app.post("/registration", async (req, res) => {
   try {
-    console.log(req.body);
+    const { name, email, password } = req.body;
+    //  console.log(req.body);
     //check if user exists
     // if exist -> tell user to login not register -> use login function
     // if DNE -> create user
 
-    await User.create({
-      email: req.body.email,
-      password: req.body.password,
+    User.findOne({ email: email }, (err, user) => {
+      if (user) {
+        res.send({ message: "user already created" });
+      } else {
+        User.create({
+          email: req.body.email,
+          password: req.body.password,
+        });
+        res.send({ message: "User Created" });
+      }
     });
-    res.send({ message: "User Created" });
   } catch (e) {
-    res.send({message: `Something went wrong`, error: e.message})
+    res.send({ message: `Something went wrong`, error: e.message });
   }
 });
 app.post("login", (req, res) => {
   // check if user exists
   // if yes -> check password -> if correct -> login -> if not correct -> tell user to try again
   // if no -> tell user to register
-  console.log(req.body);
-  res.send({ message: "Test" });
+  // console.log(req.body);
+
+  const { email, password } = req.body;
+  User.findOne({ email: email }, (err, user) => {
+    if (user) {
+      if (password === user.password) {
+        res.send({ message: "succesfully login", user: user });
+      } else {
+        res.send({ message: "password didn't match" });
+      }
+    } else {
+      res.send({ message: "user not registered" });
+    }
+  });
+
+  // res.send({ message: "Test" });
 });
