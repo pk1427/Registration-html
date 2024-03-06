@@ -43,7 +43,7 @@ app.post("/registration", async (req, res) => {
     res.send({ message: `Something went wrong`, error: e.message });
   }
 });
-app.post("login", (req, res) => {
+app.post("/login", (req, res) => {
   // check if user exists
   // if yes -> check password -> if correct -> login -> if not correct -> tell user to try again
   // if no -> tell user to register
