@@ -28,17 +28,17 @@ app.post("/registration", async (req, res) => {
     // if exist -> tell user to login not register -> use login function
     // if DNE -> create user
 
-    User.findOne({ email: email }, (err, user) => {
-      if (user) {
-        res.send({ message: "user already created" });
-      } else {
-        User.create({
-          email: req.body.email,
-          password: req.body.password,
-        });
-        res.send({ message: "User Created" });
-      }
-    });
+    const user = User.findOne({ email: email });
+
+    if (user) {
+      res.send({ message: "user already created" });
+    } else {
+      User.create({
+        email: req.body.email,
+        password: req.body.password,
+      });
+      res.send({ message: "User Created" });
+    }
   } catch (e) {
     res.send({ message: `Something went wrong`, error: e.message });
   }
