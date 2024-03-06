@@ -43,14 +43,15 @@ app.post("/registration", async (req, res) => {
     res.send({ message: `Something went wrong`, error: e.message });
   }
 });
-app.post("/login", (req, res) => {
+app.post("/login", async(req, res) => {
   // check if user exists
   // if yes -> check password -> if correct -> login -> if not correct -> tell user to try again
   // if no -> tell user to register
   // console.log(req.body);
 
   const { email, password } = req.body;
-  User.findOne({ email: email }, (err, user) => {
+  const user = await User.findOne({ email: email });
+     
     if (user) {
       if (password === user.password) {
         res.send({ message: "succesfully login", user: user });
@@ -59,8 +60,7 @@ app.post("/login", (req, res) => {
       }
     } else {
       res.send({ message: "user not registered" });
-    }
-  });
+    };
 
   // res.send({ message: "Test" });
 });
